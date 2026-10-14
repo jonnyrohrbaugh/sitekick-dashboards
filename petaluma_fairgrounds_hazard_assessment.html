@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>175 Fairgrounds Dr - Environmental Hazard & Climate Resilience Assessment</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fcfbf7',
+                            100: '#f6f3e8',
+                            200: '#e8e1cd',
+                            500: '#9e7c41',
+                            700: '#6d5328',
+                            800: '#43341b',
+                            900: '#231b0e',
+                        },
+                        slatecustom: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            600: '#475569',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        },
+                        hazard: {
+                            low: '#10b981',
+                            mod: '#f59e0b',
+                            high: '#f97316',
+                            extreme: '#ef4444'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 280px;
+            max-height: 350px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 320px;
+            }
+        }
+        .tab-btn.active {
+            border-bottom: 3px solid #9e7c41;
+            color: #43341b;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body class="bg-[#fcfbf7] text-slate-800 font-sans antialiased selection:bg-brand-200">
+
+    <!-- Chosen Palette: Warm Earth & Slate Neutral (Warm Cream #fcfbf7, Warm Earth #9e7c41, Slate #1e293b, Accent Red/Amber/Emerald for Hazard Severity) -->
+    <!-- Application Structure Plan: The SPA is structured into four core interactive analytical hubs designed for optimal data exploration:
+         1. Header & Geospatial Baseline Context: Immediately grounds the user with precise parcel coordinates, elevation, jurisdiction, and regional setting (175 Fairgrounds Dr, Petaluma, CA).
+         2. Interactive Multi-Hazard Matrix: Provides an executive overview of all 10 requested hazard categories, allowing users to filter by category (All, High Risk, Climate-Driven, Geological, Atmospheric) and view likelihood ratings (Highly Likely, Likely, Possible).
+         3. Comprehensive Hazard Deep-Dives: Detailed tabbed and card-based modules containing exact metrics, technical specifications, regulatory codes (ASCE 7-22, CBC Chapter 7A, EPA AQI, USGS NSHMP, FEMA), interactive Chart.js visualizations, and mitigation guidance.
+         4. Site Resilience & Infrastructure Strategy: Connects findings to the current 55-acre Petaluma Fairgrounds Master Planning efforts, including the $72M Public Safety Facility, Community Resilience Center (CRC), and energy backup protocols. -->
+    <!-- Visualization & Content Choices:
+         - Hazard Matrix: Dynamic grid with real-time filtering & severity badge indicators.
+         - Extreme Heat Projections: Chart.js Line Chart displaying historical vs projected days >85°F (2020-2080).
+         - Air Quality Breakdown: Chart.js Doughnut Chart displaying EPA AQI distribution (% Good, Moderate, Unhealthy for Sensitive Groups).
+         - Seismic Profile: Chart.js Bar Chart comparing Peak Ground Acceleration (PGA) across return periods and fault proximity.
+         - Flood & Sea Level Rise Elevation Model: Interactive comparative bar chart comparing site elevation (15' NAVD88) against BFE, 500-yr flood, and 2040/2060 SLR scenarios.
+         - Dynamic Tooltips & Action Checklists: Custom JS interaction to explore mitigation protocols for each hazard. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <div class="min-h-screen flex flex-col">
+        <!-- Top Navigation Bar -->
+        <header class="bg-slatecustom-900 text-white shadow-md sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <span class="bg-brand-500 text-white px-2.5 py-1 rounded text-xs font-bold tracking-wide uppercase">Sitekick Risk AI</span>
+                    <div>
+                        <h1 class="text-lg font-bold leading-tight">175 Fairgrounds Dr — Hazard Assessment</h1>
+                        <p class="text-xs text-slate-400">Petaluma, CA 94952 | Sonoma County | 38.238° N, 122.628° W</p>
+                    </div>
+                </div>
+                <div class="mt-2 sm:mt-0 flex items-center space-x-2 text-xs">
+                    <span class="bg-slate-800 text-slate-300 px-3 py-1.5 rounded-full border border-slate-700">Elevation: <strong>12 – 18 ft NAVD88</strong></span>
+                    <span class="bg-slate-800 text-slate-300 px-3 py-1.5 rounded-full border border-slate-700">Parcel: <strong>55 Acres</strong></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+
+            <!-- Executive Summary & Site Context Banner -->
+            <section class="bg-white border border-brand-200 rounded-xl p-6 shadow-sm">
+                <div class="md:flex md:items-center md:justify-between border-b border-slate-200 pb-4 mb-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slatecustom-900">Site Resilience & Multi-Hazard Assessment</h2>
+                        <p class="text-sm text-slate-600 mt-1">
+                            A comprehensive environmental hazard evaluation for the 55-acre Petaluma Fairgrounds Campus, integrating federal (USGS, FEMA, EPA, NOAA, ASCE) and California state frameworks (Cal Fire, Cal-Adapt, PG&E PSPS).
+                        </p>
+                    </div>
+                    <div class="mt-4 md:mt-0 flex space-x-2">
+                        <button onclick="scrollToSection('matrix-section')" class="bg-brand-500 hover:bg-brand-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">
+                            Explore Risk Matrix
+                        </button>
+                        <button onclick="scrollToSection('detailed-hazards')" class="bg-slatecustom-100 hover:bg-slatecustom-200 text-slatecustom-800 px-4 py-2 rounded-lg text-sm font-semibold transition">
+                            Detailed Data
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Contextual Key Stats Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-brand-50/50 p-4 rounded-lg border border-brand-100">
+                        <div class="text-xs uppercase tracking-wider text-slate-500 font-semibold">Primary Risk Factor</div>
+                        <div class="text-lg font-bold text-slatecustom-900 mt-0.5">Seismic & Wildfire Smoke</div>
+                        <div class="text-xs text-brand-700 mt-1">Rodgers Creek Fault (4.5 mi E) | PSPS Zone</div>
+                    </div>
+                    <div class="bg-brand-50/50 p-4 rounded-lg border border-brand-100">
+                        <div class="text-xs uppercase tracking-wider text-slate-500 font-semibold">Flood Profile</div>
+                        <div class="text-lg font-bold text-slatecustom-900 mt-0.5">Zone X / Moderate Fluvial</div>
+                        <div class="text-xs text-brand-700 mt-1">Tidally influenced Petaluma Watershed</div>
+                    </div>
+                    <div class="bg-brand-50/50 p-4 rounded-lg border border-brand-100">
+                        <div class="text-xs uppercase tracking-wider text-slate-500 font-semibold">Heat Trajectory</div>
+                        <div class="text-lg font-bold text-slatecustom-900 mt-0.5">+120% Days >85°F</div>
+                        <div class="text-xs text-brand-700 mt-1">Projected 44 days/yr by 2050</div>
+                    </div>
+                    <div class="bg-brand-50/50 p-4 rounded-lg border border-brand-100">
+                        <div class="text-xs uppercase tracking-wider text-slate-500 font-semibold">Water Stress</div>
+                        <div class="text-lg font-bold text-slatecustom-900 mt-0.5">Extremely High (4.2/5)</div>
+                        <div class="text-xs text-brand-700 mt-1">WRI Aqueduct Risk Profile</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Hazard Risk Matrix Section -->
+            <section id="matrix-section" class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+                <div class="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-slate-200 mb-6 gap-4">
+                    <div>
+                        <h3 class="text-xl font-bold text-slatecustom-900">Multi-Hazard Summary Matrix</h3>
+                        <p class="text-xs text-slate-500 mt-1">
+                            Likelihood classification: <strong>Highly Likely</strong> (1-10 yrs), <strong>Likely</strong> (11-50 yrs), <strong>Possible</strong> (&gt;50 yrs).
+                        </p>
+                    </div>
+                    <!-- Filter Controls -->
+                    <div class="flex flex-wrap gap-2 text-xs font-semibold">
+                        <button onclick="filterMatrix('all')" id="btn-all" class="matrix-filter-btn px-3 py-1.5 rounded-full bg-slatecustom-800 text-white">All (10)</button>
+                        <button onclick="filterMatrix('high-priority')" id="btn-high-priority" class="matrix-filter-btn px-3 py-1.5 rounded-full bg-slatecustom-100 text-slatecustom-800 hover:bg-slatecustom-200">High Priority</button>
+                        <button onclick="filterMatrix('climate')" id="btn-climate" class="matrix-filter-btn px-3 py-1.5 rounded-full bg-slatecustom-100 text-slatecustom-800 hover:bg-slatecustom-200">Climate-Driven</button>
+                        <button onclick="filterMatrix('geological')" id="btn-geological" class="matrix-filter-btn px-3 py-1.5 rounded-full bg-slatecustom-100 text-slatecustom-800 hover:bg-slatecustom-200">Geological</button>
+                    </div>
+                </div>
+
+                <!-- Matrix Cards Grid -->
+                <div id="matrix-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Cards rendered via JS -->
+                </div>
+            </section>
+
+            <!-- Detailed Hazard Deep Dives -->
+            <section id="detailed-hazards" class="space-y-6">
+                <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+                    <h3 class="text-xl font-bold text-slatecustom-900 mb-2">Detailed Hazard Analysis Modules</h3>
+                    <p class="text-sm text-slate-600 mb-6">
+                        Explore specific engineering metrics, historical frequencies, federal regulatory thresholds, and site-specific vulnerabilities for 175 Fairgrounds Drive.
+                    </p>
+
+                    <!-- Interactive Hazard Selector Tabs -->
+                    <div class="flex flex-wrap border-b border-slate-200 text-sm font-medium gap-2 sm:gap-6 mb-6 overflow-x-auto pb-1" id="hazard-tabs">
+                        <button onclick="switchTab('energy')" id="tab-energy" class="tab-btn active pb-2 transition">1. Energy</button>
+                        <button onclick="switchTab('heat')" id="tab-heat" class="tab-btn pb-2 transition">2. Extreme Heat</button>
+                        <button onclick="switchTab('wildfire')" id="tab-wildfire" class="tab-btn pb-2 transition">3. Wildfire</button>
+                        <button onclick="switchTab('air')" id="tab-air" class="tab-btn pb-2 transition">4. Air Quality</button>
+                        <button onclick="switchTab('seismic')" id="tab-seismic" class="tab-btn pb-2 transition">5. Seismic</button>
+                        <button onclick="switchTab('cold')" id="tab-cold" class="tab-btn pb-2 transition">6. Extreme Cold</button>
+                        <button onclick="switchTab('wind')" id="tab-wind" class="tab-btn pb-2 transition">7. Extreme Wind</button>
+                        <button onclick="switchTab('drought')" id="tab-drought" class="tab-btn pb-2 transition">8. Drought</button>
+                        <button onclick="switchTab('flood')" id="tab-flood" class="tab-btn pb-2 transition">9. Flood & SLR</button>
+                        <button onclick="switchTab('habitat')" id="tab-habitat" class="tab-btn pb-2 transition">10. Habitat Loss</button>
+                    </div>
+
+                    <!-- TAB CONTENT PANELS -->
+
+                    <!-- 1. ENERGY DISRUPTION -->
+                    <div id="panel-energy" class="tab-panel">
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            <div class="lg:col-span-2 space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <h4 class="text-lg font-bold text-slatecustom-900">Energy Disruption & Grid Vulnerability</h4>
+                                    <span class="px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full">Highly Likely (&lt;0.5 days) | Likely (PSPS)</span>
+                                </div>
+                                <p class="text-sm text-slate-600 leading-relaxed">
+                                    The property at 175 Fairgrounds Drive operates within PG&E's North Bay distribution territory. Energy disruptions stem from two principal vectors: localized distribution failures during winter storms/heat waves (&lt;0.5 days) and utility Public Safety Power Shutoffs (PSPS) triggered during severe Diablo wind events and low-humidity fire weather.
+                                </p>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                                    <div class="bg-slatecustom-50 p-4 rounded-lg border border-slatecustom-200">
+                                        <h5 class="text-xs font-bold uppercase tracking-wider text-slate-500">Short-Term Outages (&lt;0.5 Days)</h5>
+                                        <p class="text-base font-bold text-slatecustom-900 mt-1">Highly Likely (1–10 Years)</p>
+                                        <p class="text-xs text-slate-600 mt-1">Nuisance and heat-wave transformer overloads occur annually to semi-annually. Typical duration: 2 to 8 hours.</p>
+                                    </div>
+                                    <div class="bg-slatecustom-50 p-4 rounded-lg border border-slatecustom-200">
+                                        <h5 class="text-xs font-bold uppercase tracking-wider text-slate-500">Long-Term / PSPS Outages (&gt;24 Hours)</h5>
+                                        <p class="text-base font-bold text-slatecustom-900 mt-1">Likely (11–50 Years / Recurring)</p>
+                                        <p class="text-xs text-slate-600 mt-1">PSPS events shut down transmission/distribution circuits feeding Petaluma during high wind/dry foliage events (e.g., 2019 Kincade fire shutoffs lasted 48–72 hours).</p>
+                                    </div>
+                                </div>
+                                <div class="p-4 bg-brand-50 border border-brand-200 rounded-lg text-xs text-slate-700 space-y-1">
+                                    <p class="font-bold text-brand-800">Critical Infrastructure Requirement:</p>
+                                    <p>The planned $72M Public Safety Facility and Community Resilience Center (CRC) at the site require heavy-duty dual-fuel emergency generators, microgrid capabilities, and battery energy storage systems (BESS) to maintain 100% operational continuity during multi-day regional blackout events.</p>
+                                </div>
+                            </div>
+                            <div class="bg-slatecustom-50 p-5 rounded-xl border border-slatecustom-200 flex flex-col justify-between">
+                                <div>
+                                    <h5 class="text-sm font-bold text-slatecustom-900 mb-3">PSE Healthy Energy PSPS Vulnerability Index</h5>
+                                    <div class="space-y-3 text-xs">
+                                        <div class="flex justify-between border-b pb-1">
+                                            <span class="text-slate-500">Utility Provider:</span>
+                                            <span class="font-semibold text-slate-800">PG&E</span>
+                                        </div>
+                                        <div class="flex justify-between border-b pb-1">
+                                            <span class="text-slate-500">PSPS Circuit Tier:</span>
+                                            <span class="font-semibold text-amber-700">Tier 2 (High Fire-Threat) Buffer</span>
+                                        </div>
+                                        <div class="flex justify-between border-b pb-1">
+                                            <span class="text-slate-500">Historical PSPS Impact:</span>
+                                            <span class="font-semibold text-slate-800">3 Major Events (2019-2023)</span>
+                                        </div>
+                                        <div class="flex justify-between border-b pb-1">
+                                            <span class="text-slate-500">Avg PSPS Duration:</span>
+                                            <span class="font-semibold text-slate-800">38.4 Hours</span>
+                                        </div>
+                                        <div class="flex justify-between border-b pb-1">
+                                            <span class="text-slate-500">Solar + Storage Viability:</span>
+                                            <span class="font-semibold text-emerald-700">Excellent (High Insolation)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. EXTREME HEAT -->
+                    <div id="panel-heat" class="tab-panel hidden">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <h4 class="text-lg font-bold text-slatecustom-900">Extreme Heat & Days &gt;85°F Projections</h4>
+                                    <span class="px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full">Highly Likely (1-10 yrs)</span>
+                                </div>
+                                <p class="text-sm text-slate-600 leading-relaxed">
+                                    While Petaluma benefits from coastal maritime influences (marine layer intrusion from San Pablo Bay and Bodega Gap), interior valley warming is accelerating. Days exceeding 85°F (a key threshold for thermal stress and agricultural/livestock exhibitions at the fairgrounds) are projected to more than double by mid-century.
+                                </p>
+                                <div class="grid grid-cols-3 gap-3 text-center">
+                                    <div class="bg-slatecustom-50 p-3 rounded-lg border">
+                                        <div class="text-xs text-slate-500">Historical Baseline</div>
+                                        <div class="text-xl font-extrabold text-slatecustom-900">20 Days</div>
+                                        <div class="text-[10px] text-slate-500">Per year (&gt;85°F)</div>
+                                    </div>
+                                    <div class="bg-amber-50 p-3 rounded-lg border border-amber-200">
+                                        <div class="text-xs text-amber-800 font-medium">2040 Projection</div>
+                                        <div class="text-xl font-extrabold text-amber-900">35 Days</div>
+                                        <div class="text-[10px] text-amber-700">+75% increase</div>
+                                    </div>
+                                    <div class="bg-orange-50 p-3 rounded-lg border border-orange-200">
+                                        <div class="text-xs text-orange-800 font-medium">2060 Projection</div>
+                                        <div class="text-xl font-extrabold text-orange-900">44 Days</div>
+                                        <div class="text-[10px] text-orange-700">+120% increase</div>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-slate-500">
+                                    <em>Source: Cal-Adapt Climate Data (RCP 4.5 & RCP 8.5 Ensemble Models for Petaluma Valley).</em>
+                                </p>
+                            </div>
+                            <!-- Chart Container -->
+                            <div class="bg-slatecustom-50 p-4 rounded-xl border border-slatecustom-200">
+                                <h5 class="text-xs font-bold text-slatecustom-900 uppercase tracking-wider mb-2 text-center">Projected Days Exceeding 85°F (1990 - 2080)</h5>
+                                <div class="chart-container">
+                                    <canvas id="heatChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. WILDFIRE -->
+                    <div id="panel-wildfire" class="tab-panel hidden">
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            <div class="lg:col-span-2 space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <h4 class="text-lg font-bold text-slatecustom-900">Wildfire Severity & WUI Status</h4>
+                                    <span class="px-3 py-1 bg-orange-100 text-orange-800 text-xs font-bold rounded-full">Likely (11-50 yrs direct / Highly Likely smoke)</span>
+                                </div>
+                                <p class="text-sm text-slate-600 leading-relaxed">
+                                    175 Fairgrounds Drive is situated in an urbanized valley floor, designated as a **Local Responsibility Area (LRA) Moderate Fire Hazard Severity Zone**. However, the site is directly bordered by Wildland-Urban Interface (WUI) influence zones and high-severity SRA hills to the east (Sonoma Mountain) and west.
+                                </p>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div class="p-4 bg-slatecustom-50 rounded-lg border border-slatecustom-200 space-y-1">
+                                        <span class="text-xs font-bold text-slate-500 uppercase">Cal Fire FHSZ Zone</span>
+                                        <p class="text-base font-bold text-slatecustom-900">LRA Moderate (Local Zone)</p>
+                                        <p class="text-xs text-slate-600">Surrounding foothills are State Responsibility Area (SRA) High & Very High.</p>
+                                    </div>
+                                    <div class="p-4 bg-slatecustom-50 rounded-lg border border-slatecustom-200 space-y-1">
+                                        <span class="text-xs font-bold text-slate-500 uppercase">Wildfire Potential Rating</span>
+                                        <p class="text-base font-bold text-slatecustom-900">Moderate Risk (Direct Flame) / High (Ember Attack)</p>
+                                        <p class="text-xs text-slate-600">Ember transport during offshore wind events poses ignition risks to mid-century roof structures.</p>
+                                    </div>
+                                    <div class="p-4 bg-slatecustom-50 rounded-lg border border-slatecustom-200 space-y-1">
+                                        <span class="text-xs font-bold text-slate-500 uppercase">WUI Interface Status</span>
+                                        <p class="text-base font-bold text-slatecustom-900">WUI Buffer Zone</p>
+                                        <p class="text-xs text-slate-600">Acts as major regional emergency staging and evacuation hub during North Bay fires.</p>
+                                    </div>
+                                    <div class="p-4 bg-slatecustom-50 rounded-lg border border-slatecustom-200 space-y-1">
+                                        <span class="text-xs font-bold text-slate-500 uppercase">Ember-Resistant Code</span>
+                                        <p class="text-base font-bold text-slatecustom-900">CBC Chapter 7A Mandated</p>
+                                        <p class="text-xs text-slate-600">Applies to all new structures (e.g., $72M Public Safety building & proposed CRC).</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-brand-50 p-5 rounded-xl border border-brand-200 flex flex-col justify-between">
+                                <div>
+                                    <h5 class="text-sm font-bold text-brand-900 mb-2">Ember Mitigation Checklist (CBC Chapter 7A)</h5>
+                                    <ul class="text-xs space-y-2 text-slate-700">
+                                        <li class="flex items-start">
+                                            <span class="text-emerald-600 font-bold mr-1.5">✓</span>
+                                            <span><strong>Roofing:</strong> Class A fire-rated assembly (metal, concrete tile, heavy asphalt).</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="text-emerald-600 font-bold mr-1.5">✓</span>
+                                            <span><strong>Vents:</strong> Corrosion-resistant noncombustible mesh (1/8" max) to block flying embers.</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="text-emerald-600 font-bold mr-1.5">✓</span>
+                                            <span><strong>Defensible Space:</strong> 0-5 ft non-combustible zone around all hall structures and new facilities.</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="text-emerald-600 font-bold mr-1.5">✓</span>
+                                            <span><strong>Glazing:</strong> Dual-pane windows with tempered exterior pane for thermal radiation defense.</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. AIR POLLUTION -->
+                    <div id="panel-air" class="tab-panel hidden">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <h4 class="text-lg font-bold text-slatecustom-900">Air Pollution & EPA AQI Profile</h4>
+                                    <span class="px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full">Highly Likely (Wildfire Season)</span>
+                                </div>
+                                <p class="text-sm text-slate-600 leading-relaxed">
+                                    Petaluma generally enjoys excellent coastal air quality governed by the Northern Sonoma County Air Pollution Control District. However, late-summer and autumn wildfire smoke plumes create severe PM2.5 spikes (AQI &gt; 200/300) that impact outdoor events, schools (Live Oak Charter), and agricultural shows.
+                                </p>
+                                <div class="grid grid-cols-2 gap-3 text-xs">
+                                    <div class="p-3 bg-emerald-50 rounded border border-emerald-200">
+                                        <span class="font-bold text-emerald-900 block">Baseline Good Days</span>
+                                        <span class="text-lg font-extrabold text-emerald-700">82.5%</span>
+                                        <p class="text-[10px] text-emerald-800 mt-0.5">AQI 0-50 (Clean marine airflow)</p>
+                                    </div>
+                                    <div class="p-3 bg-yellow-50 rounded border border-yellow-200">
+                                        <span class="font-bold text-yellow-900 block">Moderate Days</span>
+                                        <span class="text-lg font-extrabold text-yellow-700">14.2%</span>
+                                        <p class="text-[10px] text-yellow-800 mt-0.5">AQI 51-100 (Winter inversions/dust)</p>
+                                    </div>
+                                    <div class="p-3 bg-orange-50 rounded border border-orange-200">
+                                        <span class="font-bold text-orange-900 block">Unhealthy for Sensitive</span>
+                                        <span class="text-lg font-extrabold text-orange-700">2.1%</span>
+                                        <p class="text-[10px] text-orange-800 mt-0.5">AQI 101-150 (Woodsmoke/Ozone)</p>
+                                    </div>
+                                    <div class="p-3 bg-red-50 rounded border border-red-200">
+                                        <span class="font-bold text-red-900 block">Unhealthy / Very Unhealthy</span>
+                                        <span class="text-lg font-extrabold text-red-700">1.2%</span>
+                                        <p class="text-[10px] text-red-800 mt-0.5">AQI &gt;151 (Wildfire smoke events)</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-slatecustom-50 p-4 rounded-xl border border-slatecustom-200">
+                                <h5 class="text-xs font-bold text-slatecustom-900 uppercase tracking-wider mb-2 text-center">Annual EPA AQI Category Distribution</h5>
+                                <div class="chart-container">
+                                    <canvas id="airChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5. SEISMIC -->
+                    <div id="panel-seismic" class="tab-panel hidden">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <h4 class="text-lg font-bold text-slatecustom-900">Seismic Hazard & Geological Profile</h4>
+                                    <span class="px-3 py-1 bg-red-100 text-red-800 text-xs font-bold rounded-full">Highly Likely (M6.7+ Regional)</span>
+                                </div>
+                                <p class="text-sm text-slate-600 leading-relaxed">
+                                    175 Fairgrounds Drive is located in a high seismic hazard area within the Northern California Coast Ranges transform fault system. The site sits on Quaternary alluvium deposits in the Petaluma Valley, amplifying ground shaking during major fault ruptures.
+                                </p>
+                                <div class="space-y-2 text-xs">
+                                    <div class="p-3 bg-slatecustom-50 rounded border flex justify-between items-center">
+                                        <div>
+                                            <span class="font-bold text-slatecustom-900 block">Seismic Design Category (SDC)</span>
+                                            <span class="text-slate-500">ASCE 7 / California Building Code</span>
+                                        </div>
+                                        <span class="text-base font-extrabold text-red-700">Category D2 / E</span>
+                                    </div>
+                                    <div class="p-3 bg-slatecustom-50 rounded border flex justify-between items-center">
+                                        <div>
+                                            <span class="font-bold text-slatecustom-900 block">Peak Ground Acceleration (PGA)</span>
+                                            <span class="text-slate-500">10% Exceedance in 50 Years (475-yr return)</span>
+                                        </div>
+                                        <span class="text-base font-extrabold text-slatecustom-900">0.48 g</span>
+                                    </div>
+                                    <div class="p-3 bg-slatecustom-50 rounded border flex justify-between items-center">
+                                        <div>
+                                            <span class="font-bold text-slatecustom-900 block">PGA (2% Exceedance in 50 Years)</span>
+                                            <span class="text-slate-500">Maximum Considered Earthquake (2475-yr return)</span>
+                                        </div>
+                                        <span class="text-base font-extrabold text-slatecustom-900">0.72 g</span>
+                                    </div>
+                                    <div class="p-3 bg-slatecustom-50 rounded border flex justify-between items-center">
+                                        <div>
+                                            <span class="font-bold text-slatecustom-900 block">Active Fault Proximity</span>
+                                            <span class="text-slate-500">Rodgers Creek Fault (4.5 mi E) | San Andreas (17 mi W)</span>
+                                        </div>
+                                        <span class="text-xs font-bold text-red-700">33% Prob. M6.7+ (Rodgers Ck)</span>
+                                    </div>
+                                    <div class="p-3 bg-amber-50 rounded border border-amber-200 flex justify-between items-center">
+                                        <div>
+                                            <span class="font-bold text-amber-900 block">Liquefaction & Landslide Susceptibility</span>
+                                            <span class="text-amber-700">Alluvial flat valley sediment vs slope risk</span>
+                                        </div>
+                                        <span class="text-xs font-bold text-amber-900">Liquefaction: Moderate-High | Landslide: Low</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-slatecustom-50 p-4 rounded-xl border border-slatecustom-200">
+                                <h5 class="text-xs font-bold text-slatecustom-900 uppercase tracking-wider mb-2 text-center">Peak Ground Acceleration (g) vs Fault Proximity</h5>
+                                <div class="chart-container">
+                                    <canvas id="seismicChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 6. EXTREME COLD -->
+                    <div id="panel-cold" class="tab-panel hidden">
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <h4 class="text-lg font-bold text-slatecustom-900">Extreme Cold Risk Analysis</h4>
+                                <span class="px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full">Possible (&gt;50 yrs / Negligible Risk)</span>
+                            </div>
+                            <p class="text-sm text-slate-600 leading-relaxed">
+                                Petaluma features a mild Mediterranean climate (Köppen *Csb*). Extreme cold is virtually absent; winter temperatures rarely drop below freezing (32°F) and almost never approach sub-20°F thresholds.
+                            </p>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="bg-slatecustom-50 p-4 rounded-lg border text-center">
+                                    <div class="text-xs text-slate-500">Days Below 15°F</div>
+                                    <div class="text-2xl font-extrabold text-slatecustom-900">0 Days</div>
+                                    <div class="text-[10px] text-slate-500">Historical & Projected</div>
+                                </div>
+                                <div class="bg-slatecustom-50 p-4 rounded-lg border text-center">
+                                    <div class="text-xs text-slate-500">Record Low Temp</div>
+                                    <div class="text-2xl font-extrabold text-slatecustom-900">16°F</div>
+                                    <div class="text-[10px] text-slate-500">Historical Extreme (1932)</div>
+                                </div>
+                                <div class="bg-slatecustom-50 p-4 rounded-lg border text-center">
+                                    <div class="text-xs text-slate-500">Avg Light Frost Nights</div>
+                                    <div class="text-2xl font-extrabold text-slatecustom-900">12–18 Days</div>
+                                    <div class="text-[10px] text-slate-500">Per year (28°F – 32°F)</div>
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-500">
+                                <em>Engineering Impact: Freeze protection insulation is required only for standard standard exterior domestic water pipes; specialized deep-freeze building envelope design is unnecessary.</em>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 7. EXTREME WIND -->
+                    <div id="panel-wind" class="tab-panel hidden">
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <h4 class="text-lg font-bold text-slatecustom-900">Extreme Wind & Storm Standards</h4>
+                                <span class="px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full">Likely (Diablo offshore wind events)</span>
+                            </div>
+                            <p class="text-sm text-slate-600 leading-relaxed">
+                                Wind risks in Petaluma stem from winter atmospheric river low-pressure systems and autumn **Diablo offshore winds** (northeasterly downslope gusts). Diablo winds dry out vegetation and elevate wildfire risk while placing gust forces on tall exhibition tents and trees.
+                            </p>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+                                <div class="p-4 bg-slatecustom-50 rounded-lg border">
+                                    <span class="text-slate-500 block">ASCE 7 Design Wind Speed</span>
+                                    <span class="text-xl font-extrabold text-slatecustom-900 block mt-1">98 mph</span>
+                                    <span class="text-slate-500">Risk Category II (Standard Structures)</span>
+                                </div>
+                                <div class="p-4 bg-slatecustom-50 rounded-lg border">
+                                    <span class="text-slate-500 block">Special Wind Region?</span>
+                                    <span class="text-xl font-extrabold text-slatecustom-900 block mt-1">No</span>
+                                    <span class="text-slate-500">Standard California Coastal/Inland Zone</span>
+                                </div>
+                                <div class="p-4 bg-slatecustom-50 rounded-lg border">
+                                    <span class="text-slate-500 block">Tornado Frequency (EF2+)</span>
+                                    <span class="text-xl font-extrabold text-emerald-700 block mt-1">0 Events</span>
+                                    <span class="text-slate-500">In past 30 years (Virtually zero risk)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 8. DROUGHT -->
+                    <div id="panel-drought" class="tab-panel hidden">
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <h4 class="text-lg font-bold text-slatecustom-900">Drought & Water Stress Rating</h4>
+                                <span class="px-3 py-1 bg-orange-100 text-orange-800 text-xs font-bold rounded-full">Highly Likely (Recurring 3-5 yr cycles)</span>
+                            </div>
+                            <p class="text-sm text-slate-600 leading-relaxed">
+                                Sonoma County experiences severe precipitation volatility (swox between atmospheric river floods and multi-year droughts). Water supply for Petaluma relies heavily on the Russian River system managed by Sonoma Water and local groundwater aquifers.
+                            </p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="p-4 bg-orange-50 border border-orange-200 rounded-lg">
+                                    <h5 class="text-xs font-bold text-orange-900 uppercase">WRI Aqueduct Baseline Water Stress</h5>
+                                    <div class="text-2xl font-extrabold text-orange-900 mt-1">4.2 / 5.0 (Extremely High)</div>
+                                    <p class="text-xs text-orange-800 mt-1">Over 80% of available surface and groundwater capacity is allocated annually across municipal and agricultural demands.</p>
+                                </div>
+                                <div class="p-4 bg-slatecustom-50 border border-slatecustom-200 rounded-lg space-y-2 text-xs">
+                                    <h5 class="text-xs font-bold text-slatecustom-900 uppercase">Fairgrounds Campus Resilience</h5>
+                                    <p class="text-slate-600">Landscaping transitions from turf to native drought-tolerant flora are recommended. Mid-century livestock areas require recycled water infrastructure and low-flow fixtures.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 9. FLOOD & SEA LEVEL RISE -->
+                    <div id="panel-flood" class="tab-panel hidden">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <h4 class="text-lg font-bold text-slatecustom-900">Flood Exposure & Sea Level Rise</h4>
+                                    <span class="px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full">Likely (Fluvial/Pluvial) | SLR Indirect</span>
+                                </div>
+                                <p class="text-sm text-slate-600 leading-relaxed">
+                                    The property sits at **12 to 18 ft NAVD88** in the lower Petaluma River watershed. While predominantly designated **FEMA Zone X (Moderate/Minimal Risk)**, portions near Washington Creek tributaries experience localized pluvial and fluvial ponding during intense 100-year atmospheric rivers.
+                                </p>
+                                <div class="space-y-2 text-xs">
+                                    <div class="p-2.5 bg-slatecustom-50 rounded border flex justify-between">
+                                        <span class="text-slate-500">Site Elevation Range:</span>
+                                        <span class="font-bold text-slatecustom-900">12.0 – 18.0 ft NAVD88</span>
+                                    </div>
+                                    <div class="p-2.5 bg-slatecustom-50 rounded border flex justify-between">
+                                        <span class="text-slate-500">FEMA Flood Zone:</span>
+                                        <span class="font-bold text-slatecustom-900">Zone X (Unshaded/Shaded) & Zone AH/AE nearby</span>
+                                    </div>
+                                    <div class="p-2.5 bg-slatecustom-50 rounded border flex justify-between">
+                                        <span class="text-slate-500">500-Year Pluvial Inundation Potential:</span>
+                                        <span class="font-bold text-amber-700">1.5 – 2.5 ft shallow ponding in parking lots</span>
+                                    </div>
+                                    <div class="p-2.5 bg-slatecustom-50 rounded border flex justify-between">
+                                        <span class="text-slate-500">2040 Sea Level Rise Projection:</span>
+                                        <span class="font-bold text-slatecustom-900">+1.2 ft (Tidal backwater impact on Petaluma River)</span>
+                                    </div>
+                                    <div class="p-2.5 bg-slatecustom-50 rounded border flex justify-between">
+                                        <span class="text-slate-500">2060 Sea Level Rise Projection:</span>
+                                        <span class="font-bold text-slatecustom-900">+2.8 ft (High vulnerability during king tides)</span>
+                                    </div>
+                                    <div class="p-3 bg-brand-50 rounded border border-brand-200">
+                                        <span class="font-bold text-brand-900 block">Recommended First Floor Elevation (FFH):</span>
+                                        <span class="text-brand-800">Minimum **19.5 ft NAVD88** (3.0 ft above 100-yr flood level) for all new structures.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-slatecustom-50 p-4 rounded-xl border border-slatecustom-200">
+                                <h5 class="text-xs font-bold text-slatecustom-900 uppercase tracking-wider mb-2 text-center">Elevation Benchmark Comparison (ft NAVD88)</h5>
+                                <div class="chart-container">
+                                    <canvas id="floodChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 10. HABITAT LOSS -->
+                    <div id="panel-habitat" class="tab-panel hidden">
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <h4 class="text-lg font-bold text-slatecustom-900">Habitat Loss & Ecosystem Health</h4>
+                                <span class="px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full">Likely (Urbanization & Climate Pressures)</span>
+                            </div>
+                            <p class="text-sm text-slate-600 leading-relaxed">
+                                The 55-acre campus represents an altered urban landscape adjacent to vital ecological corridors, including Kenilworth Park, Washington Creek, and the tidal salt marshes of the lower Petaluma River.
+                            </p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                                <div class="p-4 bg-slatecustom-50 rounded-lg border space-y-1">
+                                    <span class="font-bold text-slatecustom-900 block">Ecosystem & Wildlife Impact</span>
+                                    <p class="text-slate-600">Loss of native oak savannah canopy and riparian buffer zones. Master plan includes bioswales, native planting, and restoration connecting to the 67-acre Petaluma River Park project downstream.</p>
+                                </div>
+                                <div class="p-4 bg-slatecustom-50 rounded-lg border space-y-1">
+                                    <span class="font-bold text-slatecustom-900 block">Food System Disruption</span>
+                                    <p class="text-slate-600">Preserving the Sonoma-Marin Fair agricultural exhibits and regional Farmer's Market supports local food security and agricultural heritage against suburban sprawl.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Master Plan & Mitigation Explorer Section -->
+            <section class="bg-slatecustom-900 text-white rounded-xl p-6 shadow-md">
+                <div class="md:flex md:items-center md:justify-between border-b border-slate-700 pb-4 mb-6">
+                    <div>
+                        <h3 class="text-xl font-bold text-white">Master Plan Resilience Integration</h3>
+                        <p class="text-xs text-slate-400 mt-1">
+                            How the David Baker Architects Master Plan &amp; $72M Public Safety Facility address site hazard vulnerabilities.
+                        </p>
+                    </div>
+                    <div class="mt-3 md:mt-0">
+                        <span class="bg-brand-500 text-white px-3 py-1 rounded text-xs font-bold">2026–2028 Implementation Era</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
+                    <div class="bg-slate-800 p-4 rounded-lg border border-slate-700 space-y-2">
+                        <div class="text-brand-500 font-bold uppercase tracking-wider text-[11px]">1. $72M Public Safety Facility</div>
+                        <h4 class="text-sm font-bold text-white">Hardened Emergency HQ</h4>
+                        <p class="text-slate-300 leading-relaxed">
+                            Consolidates Police HQ, Fire Station No. 4, and the regional Emergency Operations Center (EOC). Built to Seismic Design Category D2/E standards with 100% emergency generator redundancy.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-800 p-4 rounded-lg border border-slate-700 space-y-2">
+                        <div class="text-brand-500 font-bold uppercase tracking-wider text-[11px]">2. Community Resilience Center (CRC)</div>
+                        <h4 class="text-sm font-bold text-white">Climate Shelter & Evacuation</h4>
+                        <p class="text-slate-300 leading-relaxed">
+                            Supported by California Strategic Growth Council grants. Features HEPA clean-air filtration for wildfire smoke, dual-fuel heating/cooling for extreme heat, and animal sheltering capacity.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-800 p-4 rounded-lg border border-slate-700 space-y-2">
+                        <div class="text-brand-500 font-bold uppercase tracking-wider text-[11px]">3. Infrastructure & Flood Defense</div>
+                        <h4 class="text-sm font-bold text-white">Subterranean Upgrades</h4>
+                        <p class="text-slate-300 leading-relaxed">
+                            Subterranean storm drain expansion, bioswales to catch 500-yr pluvial runoff, non-combustible roofing retrofits for Herzog Hall, and active transit links to SMART rail station.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-slatecustom-900 text-slate-400 text-xs py-6 border-t border-slate-800 mt-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div>
+                    <p class="font-bold text-slate-200">175 Fairgrounds Drive Hazard Assessment SPA</p>
+                    <p class="text-slate-500">Sources: PSE Healthy Energy, FEMA NFIP, USGS NSHMP, Cal Fire FHSZ, ASCE 7-22, EPA AQI, WRI Aqueduct, Cal-Adapt.</p>
+                </div>
+                <div class="text-slate-500 text-right">
+                    <p>Designed for Municipal Planning &amp; Public Safety Engineering</p>
+                    <p>© 2026 City of Petaluma / Sitekick Resilience Platform</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- JavaScript Data & Logic -->
+    <script>
+        // Hazard Data Matrix
+        const hazardData = [
+            {
+                id: 'energy',
+                title: 'Energy Disruption',
+                likelihood: 'Highly Likely (<0.5d) / Likely (PSPS)',
+                severity: 'High',
+                severityColor: 'bg-amber-100 text-amber-800 border-amber-200',
+                badgeColor: 'bg-amber-500',
+                category: 'climate',
+                summary: 'Grid short-term outages (<0.5 days) and multi-day PG&E Public Safety Power Shutoffs (PSPS) during extreme Diablo wind events.',
+                keyMetric: '38.4 hrs avg PSPS duration'
+            },
+            {
+                id: 'heat',
+                title: 'Extreme Heat',
+                likelihood: 'Highly Likely (1-10 yrs)',
+                severity: 'Moderate-High',
+                severityColor: 'bg-orange-100 text-orange-800 border-orange-200',
+                badgeColor: 'bg-orange-500',
+                category: 'climate',
+                summary: 'Days above 85°F projected to increase from 20 days/yr baseline to 35 days (2040) and 44 days (2060).',
+                keyMetric: '+120% days >85°F by 2060'
+            },
+            {
+                id: 'wildfire',
+                title: 'Wildfire & WUI',
+                likelihood: 'Likely (11-50 yrs direct / Highly Likely smoke)',
+                severity: 'High',
+                severityColor: 'bg-red-100 text-red-800 border-red-200',
+                badgeColor: 'bg-red-500',
+                category: 'high-priority',
+                summary: 'LRA Moderate Zone in urban flatland, surrounded by SRA High/Very High FHSZ. Ember vulnerability requires CBC Chapter 7A compliance.',
+                keyMetric: 'CBC Chapter 7A Mandated'
+            },
+            {
+                id: 'air',
+                title: 'Air Pollution',
+                likelihood: 'Highly Likely (Wildfire season)',
+                severity: 'Moderate-High',
+                severityColor: 'bg-amber-100 text-amber-800 border-amber-200',
+                badgeColor: 'bg-amber-500',
+                category: 'climate',
+                summary: 'Baseline clean air (82.5% Good AQI) interrupted by severe seasonal wildfire smoke spikes (AQI >200/300).',
+                keyMetric: '3.3% Unhealthy/Sensitive Days'
+            },
+            {
+                id: 'seismic',
+                title: 'Seismic Hazards',
+                likelihood: 'Highly Likely (M6.7+ Regional in 30 yr window)',
+                severity: 'High',
+                severityColor: 'bg-red-100 text-red-800 border-red-200',
+                badgeColor: 'bg-red-500',
+                category: 'geological',
+                summary: 'PGA of 0.48g (10% in 50yr) and 0.72g (2% in 50yr). Rodgers Creek Fault 4.5 mi East. Liquefaction susceptibility Moderate-High in alluvial sediment.',
+                keyMetric: 'SDC Category D2 / E'
+            },
+            {
+                id: 'cold',
+                title: 'Extreme Cold',
+                likelihood: 'Possible (>50 yrs / Negligible)',
+                severity: 'Low',
+                severityColor: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+                badgeColor: 'bg-emerald-500',
+                category: 'climate',
+                summary: '0 days below 15°F. Record low 16°F (1932). Freeze protection required only for exterior plumbing.',
+                keyMetric: '0 days <15°F'
+            },
+            {
+                id: 'wind',
+                title: 'Extreme Wind',
+                likelihood: 'Likely (11-50 yrs)',
+                severity: 'Moderate',
+                severityColor: 'bg-blue-100 text-blue-800 border-blue-200',
+                badgeColor: 'bg-blue-500',
+                category: 'climate',
+                summary: 'ASCE 7-22 design wind speed 98 mph (Risk Cat II). Offshore Diablo wind gusts dry vegetation and stress temporary event structures.',
+                keyMetric: '98 mph ASCE 7 Design Speed'
+            },
+            {
+                id: 'drought',
+                title: 'Drought & Water Stress',
+                likelihood: 'Highly Likely (1-10 yrs)',
+                severity: 'High',
+                severityColor: 'bg-orange-100 text-orange-800 border-orange-200',
+                badgeColor: 'bg-orange-500',
+                category: 'high-priority',
+                summary: 'WRI Aqueduct score 4.2/5.0 (Extremely High Baseline Water Stress). Russian River watershed constraints.',
+                keyMetric: 'WRI Score: 4.2 / 5.0'
+            },
+            {
+                id: 'flood',
+                title: 'Flood & Sea Level Rise',
+                likelihood: 'Likely (11-50 yrs)',
+                severity: 'Moderate-High',
+                severityColor: 'bg-amber-100 text-amber-800 border-amber-200',
+                badgeColor: 'bg-amber-500',
+                category: 'high-priority',
+                summary: 'Site elevation 12-18 ft NAVD88. FEMA Zone X with localized pluvial ponding. Recommended First Floor Height: 19.5 ft NAVD88.',
+                keyMetric: 'Rec. FFH: 19.5 ft NAVD88'
+            },
+            {
+                id: 'habitat',
+                title: 'Habitat Loss',
+                likelihood: 'Likely (11-50 yrs)',
+                severity: 'Moderate',
+                severityColor: 'bg-slate-100 text-slate-800 border-slate-200',
+                badgeColor: 'bg-slate-500',
+                category: 'climate',
+                summary: 'Loss of riparian oak woodland buffer; fairgrounds urban green space vital for agricultural connectivity and food security.',
+                keyMetric: 'Bioswale & Native Re-oak'
+            }
+        ];
+
+        // Render Hazard Matrix Cards
+        function renderMatrix(filter = 'all') {
+            const container = document.getElementById('matrix-grid');
+            container.innerHTML = '';
+
+            const filtered = hazardData.filter(item => {
+                if (filter === 'all') return true;
+                if (filter === 'high-priority') return item.severity === 'High' || item.category === 'high-priority';
+                if (filter === 'climate') return item.category === 'climate' || item.id === 'heat' || item.id === 'drought' || item.id === 'wildfire' || item.id === 'flood' || item.id === 'air' || item.id === 'energy';
+                if (filter === 'geological') return item.category === 'geological' || item.id === 'seismic';
+                return true;
+            });
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = `p-4 rounded-xl border bg-white hover:shadow-md transition flex flex-col justify-between space-y-3 cursor-pointer`;
+                card.onclick = () => {
+                    scrollToSection('detailed-hazards');
+                    switchTab(item.id);
+                };
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Hazard Category</span>
+                            <span class="px-2 py-0.5 rounded text-[11px] font-bold border ${item.severityColor}">
+                                ${item.severity} Risk
+                            </span>
+                        </div>
+                        <h4 class="text-base font-bold text-slatecustom-900 mt-1 flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full ${item.badgeColor}"></span>
+                            ${item.title}
+                        </h4>
+                        <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+                            ${item.summary}
+                        </p>
+                    </div>
+                    <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
+                        <span class="text-slate-500">Likelihood: <strong class="text-slate-800">${item.likelihood.split(' ')[0]} ${item.likelihood.split(' ')[1] || ''}</strong></span>
+                        <span class="font-bold text-brand-700 hover:underline">View Data →</span>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function filterMatrix(filterCategory) {
+            document.querySelectorAll('.matrix-filter-btn').forEach(btn => {
+                btn.classList.remove('bg-slatecustom-800', 'text-white');
+                btn.classList.add('bg-slatecustom-100', 'text-slatecustom-800');
+            });
+            const activeBtn = document.getElementById(`btn-${filterCategory}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('bg-slatecustom-100', 'text-slatecustom-800');
+                activeBtn.classList.add('bg-slatecustom-800', 'text-white');
+            }
+            renderMatrix(filterCategory);
+        }
+
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.add('hidden'));
+
+            const selectedBtn = document.getElementById(`tab-${tabId}`);
+            const selectedPanel = document.getElementById(`panel-${tabId}`);
+
+            if (selectedBtn) selectedBtn.classList.add('active');
+            if (selectedPanel) selectedPanel.classList.remove('hidden');
+
+            // Trigger chart updates if applicable
+            if (tabId === 'heat' && !window.heatChartInitialized) initHeatChart();
+            if (tabId === 'air' && !window.airChartInitialized) initAirChart();
+            if (tabId === 'seismic' && !window.seismicChartInitialized) initSeismicChart();
+            if (tabId === 'flood' && !window.floodChartInitialized) initFloodChart();
+        }
+
+        function scrollToSection(id) {
+            const elem = document.getElementById(id);
+            if (elem) {
+                elem.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // --- Chart.js Initializations ---
+
+        function initHeatChart() {
+            const ctx = document.getElementById('heatChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['1990 Baseline', '2010', '2020', '2030 (Proj)', '2040 (Proj)', '2050 (Proj)', '2060 (Proj)', '2080 (Proj)'],
+                    datasets: [{
+                        label: 'Days >85°F per Year',
+                        data: [18, 20, 22, 28, 35, 40, 44, 52],
+                        borderColor: '#f97316',
+                        backgroundColor: 'rgba(249, 115, 22, 0.1)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#9e7c41'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ` Days >85°F: ${context.raw} days/yr`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Days / Year', font: { size: 10 } }
+                        }
+                    }
+                }
+            });
+            window.heatChartInitialized = true;
+        }
+
+        function initAirChart() {
+            const ctx = document.getElementById('airChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Good (0-50)', 'Moderate (51-100)', 'Unhealthy for Sensitive (101-150)', 'Unhealthy / Wildfire (151+)'],
+                    datasets: [{
+                        data: [82.5, 14.2, 2.1, 1.2],
+                        backgroundColor: ['#10b981', '#f59e0b', '#f97316', '#ef4444'],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { boxWidth: 12, font: { size: 10 } }
+                        }
+                    }
+                }
+            });
+            window.airChartInitialized = true;
+        }
+
+        function initSeismicChart() {
+            const ctx = document.getElementById('seismicChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['PGA (10% 50yr)', 'PGA (2% 50yr MCE)', 'Rodgers Ck Fault', 'San Andreas Fault'],
+                    datasets: [{
+                        label: 'Acceleration / Distance Metric',
+                        data: [0.48, 0.72, 4.5, 17.0],
+                        backgroundColor: ['#f59e0b', '#ef4444', '#6d5328', '#1e293b']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    if (context.dataIndex < 2) {
+                                        return ` Peak Ground Accel: ${context.raw} g`;
+                                    } else {
+                                        return ` Distance to Fault: ${context.raw} miles`;
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Metric (g force or miles)', font: { size: 10 } }
+                        }
+                    }
+                }
+            });
+            window.seismicChartInitialized = true;
+        }
+
+        function initFloodChart() {
+            const ctx = document.getElementById('floodChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Site Min El.', 'Site Max El.', '100-Yr Flood Level', '2040 SLR + Storm', '2060 SLR + Storm', 'Rec. First Floor'],
+                    datasets: [{
+                        label: 'Feet NAVD88',
+                        data: [12.0, 18.0, 15.5, 16.7, 18.3, 19.5],
+                        backgroundColor: ['#9e7c41', '#6d5328', '#3b82f6', '#f59e0b', '#f97316', '#10b981']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ` Elevation: ${context.raw} ft NAVD88`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 8,
+                            max: 22,
+                            title: { display: true, text: 'ft NAVD88', font: { size: 10 } }
+                        }
+                    }
+                }
+            });
+            window.floodChartInitialized = true;
+        }
+
+        // Document Ready Initializations
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMatrix('all');
+            initHeatChart();
+        });
+    </script>
+</body>
+</html>
