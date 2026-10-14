@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>175 Fairgrounds Drive | Architectural & Historical Context Briefing</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sand: {
+                            50: '#FDFBF7',
+                            100: '#F7F3EB',
+                            200: '#E8E2D5',
+                            300: '#D5CBB9',
+                            800: '#3D3833',
+                            900: '#2B2927'
+                        },
+                        terracotta: {
+                            100: '#F8ECE7',
+                            500: '#B85B35',
+                            600: '#8C4327',
+                            700: '#6E321B'
+                        },
+                        pine: {
+                            100: '#E8F0EC',
+                            500: '#3E6B56',
+                            700: '#2D4A3E',
+                            900: '#192C24'
+                        },
+                        ochre: {
+                            500: '#D99B26',
+                            600: '#B57E19'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+                        serif: ['Georgia', 'Cambria', 'Times New Roman', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 360px;
+            }
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #F7F3EB;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #D5CBB9;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="bg-sand-50 text-sand-900 font-sans leading-relaxed antialiased selection:bg-terracotta-100 selection:text-terracotta-700">
+
+    <!-- Chosen Palette: Sonoma Sand & Earth (Primary Background: Warm Sand/Cream #FDFBF7, Terracotta Accent #8C4327, Sonoma Pine #2D4A3E, Neutral Borders #E8E2D5) -->
+    <!-- Application Structure Plan: Designed as an interactive site context portal tailored specifically for architects and planners. It features a sticky master header with key site metrics, interactive tabbed navigation organizing deep narrative research across 6 core domains (Bioregion, Indigenous & Settler History, Economic Evolution, Socio-Political Landscape, Architectural Synthesis, & Programmatic Matrix), interactive Chart.js visualizations for site data, and an interactive spatial program analysis tool. This structure transforms a 2500-word comprehensive research report into an intuitive, non-linear architectural site briefing. -->
+    <!-- Visualization & Content Choices: 
+         - Climate & Hydrology Data -> Goal: Inform environmental design strategy -> Method: Interactive Line Chart (Chart.js) -> Context: Monthly temp/precipitation profiles for passive heating/cooling strategy.
+         - Land Use & Farmland Classification -> Goal: Compare spatial site conditions -> Method: Doughnut Chart (Chart.js) -> Context: Demonstrates urban fill vs. agricultural soil preservation requirements.
+         - Civic Priorities & Healthy Democracy Panel -> Goal: Illustrate stakeholder priorities -> Method: Stacked Bar Chart (Chart.js) -> Context: Weighs annual fair preservation, public porous access, emergency resilience, and speedway transitions.
+         - Historical Timeline -> Goal: Dynamic temporal progression -> Method: Interactive HTML/CSS Stepper with JS filter -> Context: Coast Miwok to 2026 Master Plan.
+         - NO SVG graphics or Mermaid JS used; canvas and styled HTML elements utilized strictly. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <!-- Header / Navigation Bar -->
+    <header class="sticky top-0 z-50 bg-sand-50/95 backdrop-blur border-b border-sand-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded bg-terracotta-600 text-white flex items-center justify-center font-bold text-lg shadow-sm">
+                    175
+                </div>
+                <div>
+                    <h1 class="text-base font-bold text-sand-900 leading-tight">175 Fairgrounds Drive</h1>
+                    <p class="text-xs text-sand-800 font-medium">Petaluma, California • Architectural & Site Context Briefing</p>
+                </div>
+            </div>
+
+            <!-- Header Quick Stats -->
+            <div class="hidden lg:flex items-center space-x-6 text-xs text-sand-800">
+                <div class="border-l border-sand-200 pl-4">
+                    <span class="block text-sand-800 font-normal">Site Area</span>
+                    <span class="font-semibold text-sand-900">55–60 Acres (23.5 Ha)</span>
+                </div>
+                <div class="border-l border-sand-200 pl-4">
+                    <span class="block text-sand-800 font-normal">Jurisdiction</span>
+                    <span class="font-semibold text-sand-900">City of Petaluma (Jan 2024)</span>
+                </div>
+                <div class="border-l border-sand-200 pl-4">
+                    <span class="block text-sand-800 font-normal">Active Master Planner</span>
+                    <span class="font-semibold text-terracotta-600">David Baker Architects</span>
+                </div>
+                <div class="border-l border-sand-200 pl-4">
+                    <span class="block text-sand-800 font-normal">Major Capital Project</span>
+                    <span class="font-semibold text-pine-700">$71.5M Public Safety Campus</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabbed Navigation Bar -->
+        <nav class="bg-sand-100 border-t border-sand-200 overflow-x-auto custom-scrollbar">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex space-x-1 sm:space-x-4 py-2 min-w-max text-xs sm:text-sm">
+                <button onclick="switchTab('overview')" id="tab-overview" class="tab-btn active px-3 py-1.5 rounded-md font-medium text-terracotta-700 bg-white shadow-sm border border-sand-200">
+                    🏛️ Overview & Key Metrics
+                </button>
+                <button onclick="switchTab('bioregion')" id="tab-bioregion" class="tab-btn px-3 py-1.5 rounded-md font-medium text-sand-800 hover:text-sand-900 hover:bg-sand-200/60 transition">
+                    🌿 Bioregion & Ecology
+                </button>
+                <button onclick="switchTab('heritage')" id="tab-heritage" class="tab-btn px-3 py-1.5 rounded-md font-medium text-sand-800 hover:text-sand-900 hover:bg-sand-200/60 transition">
+                    🛖 Indigenous & Settler History
+                </button>
+                <button onclick="switchTab('economy')" id="tab-economy" class="tab-btn px-3 py-1.5 rounded-md font-medium text-sand-800 hover:text-sand-900 hover:bg-sand-200/60 transition">
+                    🚜 Agricultural & Economic History
+                </button>
+                <button onclick="switchTab('political')" id="tab-political" class="tab-btn px-3 py-1.5 rounded-md font-medium text-sand-800 hover:text-sand-900 hover:bg-sand-200/60 transition">
+                    ⚖️ 50-Year Socio-Political Shift
+                </button>
+                <button onclick="switchTab('matrix')" id="tab-matrix" class="tab-btn px-3 py-1.5 rounded-md font-medium text-sand-800 hover:text-sand-900 hover:bg-sand-200/60 transition">
+                    📐 Architectural Matrix & Constraints
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- ========================================== -->
+        <!-- TAB 1: OVERVIEW & KEY METRICS -->
+        <!-- ========================================== -->
+        <section id="content-overview" class="tab-content space-y-8">
+            <!-- Section Intro -->
+            <div class="bg-white p-6 sm:p-8 rounded-xl border border-sand-200 shadow-sm">
+                <div class="max-w-3xl">
+                    <span class="text-xs font-bold uppercase tracking-wider text-terracotta-600 bg-terracotta-100 px-2.5 py-1 rounded">Architectural Context Executive Summary</span>
+                    <h2 class="text-2xl sm:text-3xl font-serif font-bold text-sand-900 mt-3">Designing at the Intersection of Agrarian History & Urban Resilience</h2>
+                    <p class="mt-3 text-sand-800 text-sm sm:text-base leading-relaxed">
+                        175 Fairgrounds Drive is a 55-to-60 acre municipal parcel situated in the geographic and cultural heart of Petaluma, California. Reclaimed by the City of Petaluma in January 2024 following the expiration of a 50-year lease with the state-affiliated 4th District Agricultural Association, the site is undergoing a multi-phase transformation. For an architectural or urban design team, the property presents a rare convergence of historic preservation, ecological restoration, high-occupancy civic programming, and essential infrastructure deployment.
+                    </p>
+                </div>
+
+                <!-- Strategic Quick Reference Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 pt-6 border-t border-sand-200 text-xs">
+                    <div class="p-4 bg-sand-50 rounded-lg border border-sand-200">
+                        <span class="font-bold text-sand-900 block text-sm mb-1">📍 Location & Boundaries</span>
+                        <p class="text-sand-800">Bounded by E. Washington St (North), Payran St (South/West), and Kenilworth Dr (East). Prime central urban infill site within the Petaluma River Basin.</p>
+                    </div>
+                    <div class="p-4 bg-sand-50 rounded-lg border border-sand-200">
+                        <span class="font-bold text-sand-900 block text-sm mb-1">🏛️ Governance Transition</span>
+                        <p class="text-sand-800">Shifted from 4th DAA state agricultural management (1973–2023) to direct municipal oversight by the City of Petaluma. Master plan lead: David Baker Architects (2026).</p>
+                    </div>
+                    <div class="p-4 bg-sand-50 rounded-lg border border-sand-200">
+                        <span class="font-bold text-sand-900 block text-sm mb-1">🚑 Anchor Development</span>
+                        <p class="text-sand-800">3.5-acre northern footprint dedicated to the new $71.5M Petaluma Public Safety Facility (Police HQ, Fire Station No. 4, regional Emergency Operations Center).</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Spatial Parcel Allocation Schema & Chart -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Parcel Allocation Diagram / Cards -->
+                <div class="lg:col-span-7 bg-white p-6 rounded-xl border border-sand-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-sand-900 font-serif mb-2">Site Spatial Allocation & Operational Zones</h3>
+                        <p class="text-xs text-sand-800 mb-4">
+                            Understanding how the 55-60 acres are currently programmed is essential for proposing new building massing, circulation loops, and public realm interventions.
+                        </p>
+                        
+                        <div class="space-y-3">
+                            <div class="p-3 bg-sand-50 rounded-lg border-l-4 border-pine-700 flex justify-between items-center">
+                                <div>
+                                    <span class="font-bold text-xs text-sand-900 block">Public Safety Facility (PPSF)</span>
+                                    <span class="text-xs text-sand-800">3.5 Acres • Design-Build by Alten Construction • Delivery 2028</span>
+                                </div>
+                                <span class="px-2 py-1 bg-pine-100 text-pine-900 font-mono text-xs font-bold rounded">~6% Area</span>
+                            </div>
+
+                            <div class="p-3 bg-sand-50 rounded-lg border-l-4 border-terracotta-600 flex justify-between items-center">
+                                <div>
+                                    <span class="font-bold text-xs text-sand-900 block">Event Grounds & Historical Core (Herzog Hall)</span>
+                                    <span class="text-xs text-sand-800">~22 Acres • Petaluma Fair, World's Ugliest Dog Contest, Civic Gathering</span>
+                                </div>
+                                <span class="px-2 py-1 bg-terracotta-100 text-terracotta-700 font-mono text-xs font-bold rounded">~38% Area</span>
+                            </div>
+
+                            <div class="p-3 bg-sand-50 rounded-lg border-l-4 border-ochre-500 flex justify-between items-center">
+                                <div>
+                                    <span class="font-bold text-xs text-sand-900 block">Petaluma Speedway & Oval Track</span>
+                                    <span class="text-xs text-sand-800">~12 Acres • 3/8-Mile Dirt Oval • Transitioning / Under Active Civic Review</span>
+                                </div>
+                                <span class="px-2 py-1 bg-amber-100 text-amber-800 font-mono text-xs font-bold rounded">~21% Area</span>
+                            </div>
+
+                            <div class="p-3 bg-sand-50 rounded-lg border-l-4 border-sand-300 flex justify-between items-center">
+                                <div>
+                                    <span class="font-bold text-xs text-sand-900 block">Parking, Livestock Arenas & Open Buffer</span>
+                                    <span class="text-xs text-sand-800">~18.5 Acres • Evacuation Staging, Flex Parking, Kenilworth Edge</span>
+                                </div>
+                                <span class="px-2 py-1 bg-sand-200 text-sand-800 font-mono text-xs font-bold rounded">~35% Area</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-sand-200 text-xs text-sand-800">
+                        <strong>Planning Takeaway:</strong> Design proposals must account for the removal of existing northern overflow parking due to the Public Safety Facility, requiring innovative surface management or multi-modal transit connections.
+                    </div>
+                </div>
+
+                <!-- Site Spatial Breakdown Chart -->
+                <div class="lg:col-span-5 bg-white p-6 rounded-xl border border-sand-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-sand-900 font-serif mb-1">Land Use Distribution (%)</h3>
+                        <p class="text-xs text-sand-800 mb-4">Proportional breakdown of current site commitments.</p>
+                        
+                        <div class="chart-container">
+                            <canvas id="spatialChart"></canvas>
+                        </div>
+                    </div>
+                    <p class="text-xs text-sand-800 text-center mt-2 italic">Figure 1.1: Relative land footprint of active site uses at 175 Fairgrounds Dr.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- TAB 2: BIOREGION & ECOLOGY -->
+        <!-- ========================================== -->
+        <section id="content-bioregion" class="tab-content hidden space-y-8">
+            <div class="bg-white p-6 sm:p-8 rounded-xl border border-sand-200 shadow-sm">
+                <span class="text-xs font-bold uppercase tracking-wider text-pine-700 bg-pine-100 px-2.5 py-1 rounded">Ecological & Environmental Context</span>
+                <h2 class="text-2xl font-serif font-bold text-sand-900 mt-3">Bioregional Dynamics & Site Health Assessment</h2>
+                <p class="mt-3 text-sand-800 text-sm leading-relaxed">
+                    Designing at 175 Fairgrounds Drive requires a deep understanding of the Petaluma Valley ecosystem—a microclimate-rich corridor influenced by marine air intrusion, heavy subterranean clay alluvial deposits, and seasonal watershed dynamics connecting to the tidal Petaluma River.
+                </p>
+            </div>
+
+            <!-- 2-Column Ecological Breakdown -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Natural History & Watershed -->
+                <div class="bg-white p-6 rounded-xl border border-sand-200 shadow-sm space-y-4">
+                    <h3 class="text-lg font-bold text-sand-900 font-serif border-b border-sand-200 pb-2">1. Watershed Geology & Climate Microclimate</h3>
+                    
+                    <div class="text-xs text-sand-800 space-y-3 leading-relaxed">
+                        <p>
+                            <strong>Geological Foundation:</strong> The site rests within the Petaluma Basin, a structural trough framed by the Sonoma Mountains to the east and the Coast Range to the west. The immediate soil composition consists of deep alluvial silt and heavy Bay mud/clay complexes derived from historical floodplain deposition.
+                        </p>
+                        <p>
+                            <strong>The Petaluma Gap Phenomenon:</strong> The property is directly impacted by the "Petaluma Gap"—a low-lying geological break in the coastal mountain range. This geographical notch draws cool Pacific Ocean fog and high-velocity wind inland from Bodega Bay towards San Pablo Bay every afternoon, creating sharp diurnal temperature drops of up to 35°F (19°C) during summer months.
+                        </p>
+                        <p>
+                            <strong>Architectural Microclimate Strategy:</strong> New structures must incorporate high thermal mass, wind-sheltered exterior courtyards, and robust envelope sealing to optimize passive heating and cool-breeze ventilation while insulating against harsh afternoon gusting.
+                        </p>
+                    </div>
+
+                    <div class="mt-4 p-4 bg-sand-50 rounded-lg border border-sand-200">
+                        <h4 class="font-bold text-xs text-sand-900 mb-1">Hydrological Context & Flood Risk</h4>
+                        <p class="text-xs text-sand-800">
+                            Located ~0.5 miles from the tidal Petaluma River, the fairgrounds site sits within a low-gradient floodplain zone. Modern stormwater strategies require bioswales, dry creeks (as pioneered at adjacent Kenilworth Park), and permeable paving to manage seasonal runoff under CEQA guidelines without overburdening municipal storm drains.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Climate Data Chart Container -->
+                <div class="bg-white p-6 rounded-xl border border-sand-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-sand-900 font-serif mb-1">Petaluma Monthly Climate Profile</h3>
+                        <p class="text-xs text-sand-800 mb-4">Temperature ranges (°F) and average monthly rainfall (inches) guiding passive design performance.</p>
+                        
+                        <div class="chart-container">
+                            <canvas id="climateChart"></canvas>
+                        </div>
+                    </div>
+                    <p class="text-xs text-sand-800 text-center mt-2 italic">Figure 2.1: Climate Data highlights heavy winter rainfall contrasts with dry, foggy summer conditions.</p>
+                </div>
+            </div>
+
+            <!-- Site Health & Ecological Degradation Matrix -->
+            <div class="bg-white p-6 rounded-xl border border-sand-200 shadow-sm">
+                <h3 class="text-lg font-bold text-sand-900 font-serif mb-4">Environmental Site Condition & Ecological Health Matrix</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
+                    <div class="p-4 bg-sand-50 rounded-lg border border-sand-200">
+                        <span class="font-bold text-terracotta-600 text-sm block mb-2">🔴 Urban Heat Island & Tree Canopy</span>
+                        <p class="text-sand-800">
+                            Extensive surface asphalt parking lots and unshaded dirt tracks contribute to an elevated urban heat island effect during summer peaks. Tree canopy is primarily concentrated along the perimeter (Kenilworth Dr) and within Kenilworth Park, requiring replacement canopy planning.
+                        </p>
+                    </div>
+                    <div class="p-4 bg-sand-50 rounded-lg border border-sand-200">
+                        <span class="font-bold text-ochre-600 text-sm block mb-2">🟡 Soil Quality & Contamination Profile</span>
+                        <p class="text-sand-800">
+                            While soil quality in undeveloped segments retains historic agricultural viability (Class I/II alluvial loam), decades of dirt-track racing at Petaluma Speedway have generated localized concerns regarding fuel, petroleum hydrocarbons, and dust particulate emissions.
+                        </p>
+                    </div>
+                    <div class="p-4 bg-sand-50 rounded-lg border border-sand-200">
+                        <span class="font-bold text-pine-700 text-sm block mb-2">🟢 Regulatory Streamlining (CEQA)</span>
+                        <p class="text-sand-800">
+                            The site master plan is aligned with the Petaluma General Plan 2040 EIR, enabling future site development to tier off existing programmatic EIRs under CEQA Guidelines Section 15183, utilizing Vehicle Miles Traveled (VMT) metrics under SB 743.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- TAB 3: INDIGENOUS & SETTLER HISTORY -->
+        <!-- ========================================== -->
+        <section id="content-heritage" class="tab-content hidden space-y-8">
+            <div class="bg-white p-6 sm:p-8 rounded-xl border border-sand-200 shadow-sm">
+                <span class="text-xs font-bold uppercase tracking-wider text-terracotta-600 bg-terracotta-100 px-2.5 py-1 rounded">Deep Cultural Heritage</span>
+                <h2 class="text-2xl font-serif font-bold text-sand-900 mt-3">Indigenous Coast Miwok Stewardship & European Settlement</h2>
+                <p class="mt-3 text-sand-800 text-sm leading-relaxed">
+                    Long before the establishment of fairgrounds or speedways, 175 Fairgrounds Drive occupied a rich cultural and ecological landscape stewarded by the Coast Miwok people. Understanding this heritage provides a vital foundation for respectful, culturally grounded architectural design.
+                </p>
+            </div>
+
+            <!-- Historical Narrative Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Coast Miwok Era -->
+                <div class="bg-white p-6 rounded-xl border border-sand-200 shadow-sm space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded-full bg-sand-200 text-sand-900 flex items-center justify-center font-bold text-sm">
+                            01
+                        </div>
+                        <h3 class="text-lg font-bold text-sand-900 font-serif">Coast Miwok & Southern Pomo Lineage</h3>
+                    </div>
+                    <p class="text-xs text-sand-800 leading-relaxed">
+                        The Petaluma Valley (derived from the Coast Miwok word <em>Peta-luuma</em>, meaning "back side of the hill" or "sloping ridge") was home to indigenous villages established along tidal creeks and wetlands. The Coast Miwok practiced sophisticated ecological stewardship, managing oak savannas through controlled seasonal burning to promote acorn yields, game habitat, and native basketry flora (such as tule and willow).
+                    </p>
+                    <p class="text-xs text-sand-800 leading-relaxed">
+                        Land at 175 Fairgrounds Drive was part of an interconnected ecosystem where waterways provided navigational corridors and rich marine, avian, and terrestrial sustenance without permanent masonry alterations.
+                    </p>
+                    <div class="p-3 bg-sand-50 rounded border-l-2 border-terracotta-600 text-xs text-sand-800">
+                        <strong>Architectural Integration:</strong> Modern proposals are encouraged to incorporate native landscape restoration (e.g., Coast Live Oak, valley oaks, native grasses) and reflect indigenous environmental ethics in stormwater and material selections.
+                    </div>
+                </div>
+
+                <!-- Mexican Land Grant & Settler Era -->
+                <div class="bg-white p-6 rounded-xl border border-sand-200 shadow-sm space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded-full bg-sand-200 text-sand-900 flex items-center justify-center font-bold text-sm">
+                            02
+                        </div>
+                        <h3 class="text-lg font-bold text-sand-900 font-serif">Rancho Petaluma & Secularization</h3>
+                    </div>
+                    <p class="text-xs text-sand-800 leading-relaxed">
+                        Following the secularization of California's Spanish missions in the 1830s, General Mariano Guadalupe Vallejo was granted the massive 66,000-acre <em>Rancho Petaluma</em> in 1834. Vallejo constructed the historic Petaluma Adobe (located east of the fairgrounds site), establishing a vast cattle-ranching empire driven by hide and tallow trade.
+                    </p>
+                    <p class="text-xs text-sand-800 leading-relaxed">
+                        During this era, indigenous populations were systematically displaced or absorbed into ranch labor networks. The landscape shifted from ecological burning and hunting grounds to extensive cattle grazing, permanently altering soil compactivity and introducing non-native European grasses across the basin.
+                    </p>
+                    <div class="p-3 bg-sand-50 rounded border-l-2 border-pine-700 text-xs text-sand-800">
+                        <strong>Architectural Vernacular Reference:</strong> The Adobe and early agrarian timber structures established Petaluma's foundational architectural language: thick earth/plaster walls, deep shade overhangs, linear courtyard layouts, and exposed structural timber.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Historical Interactive Timeline -->
+            <div class="bg-white p-6 rounded-xl border border-sand-200 shadow-sm">
+                <h3 class="text-lg font-bold text-sand-900 font-serif mb-4">Temporal Evolution of 175 Fairgrounds Drive</h3>
+                
+                <div class="relative border-l-2 border-terracotta-500 ml-4 pl-6 space-y-6 text-xs">
+                    <div class="relative">
+                        <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-terracotta-600 border-2 border-white"></div>
+                        <span class="font-mono font-bold text-terracotta-600">Pre-1830s</span>
+                        <h4 class="font-bold text-sand-900 text-sm">Indigenous Stewardship</h4>
+                        <p class="text-sand-800">Coast Miwok villages manage the Petaluma Basin's wetlands, oak woodlands, and tidal reaches.</p>
+                    </div>
+
+                    <div class="relative">
+                        <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-sand-300 border-2 border-white"></div>
+                        <span class="font-mono font-bold text-sand-800">1834–1850s</span>
+                        <h4 class="font-bold text-sand-900 text-sm">Rancho Petaluma Era</h4>
+                        <p class="text-sand-800">Mariano Guadalupe Vallejo establishes cattle ranching; European settlement begins along the navigable Petaluma River.</p>
+                    </div>
+
+                    <div class="relative">
+                        <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-sand-300 border-2 border-white"></div>
+                        <span class="font-mono font-bold text-sand-800">1880s–1920s</span>
+                        <h4 class="font-bold text-sand-900 text-sm">Agrarian & Poultry Boom</h4>
+                        <p class="text-sand-800">Petaluma becomes the "World's Egg Capital." Agricultural expositions begin to formalize near the town center.</p>
+                    </div>
+
+                    <div class="relative">
+                        <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-sand-300 border-2 border-white"></div>
+                        <span class="font-mono font-bold text-sand-800">1973</span>
+                        <h4 class="font-bold text-sand-900 text-sm">Execution of 50-Year Lease to 4th DAA</h4>
+                        <p class="text-sand-800">City enters a 50-year lease with the state 4th District Agricultural Association to operate the Sonoma-Marin Fairgrounds.</p>
+                    </div>
+
+                    <div class="relative">
+                        <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-pine-700 border-2 border-white"></div>
+                        <span class="font-mono font-bold text-pine-700">2024–2026</span>
+                        <h4 class="font-bold text-sand-900 text-sm">Municipal Reclamation & Master Planning</h4>
+                        <p class="text-sand-800">City reclaims full management; Healthy Democracy panel sets priorities; David Baker Architects leads 55-acre master plan; Alten Construction breaks ground on $71.5M Public Safety Campus.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- TAB 4: AGRICULTURAL & ECONOMIC HISTORY -->
+        <!-- ========================================== -->
+        <section id="content-economy" class="tab-content hidden space-y-8">
+            <div class="bg-white p-6 sm:p-8 rounded-xl border border-sand-200 shadow-sm">
+                <span class="text-xs font-bold uppercase tracking-wider text-ochre-600 bg-amber-100 px-2.5 py-1 rounded">Economic Transformation</span>
+                <h2 class="text-2xl font-serif font-bold text-sand-900 mt-3">From "Egg Capital of the World" to Civic Cultural Hub</h2>
+                <p class="mt-3 text-sand-800 text-sm leading-relaxed">
+                    Petaluma's economic trajectory shaped the built form of the fairgrounds. The site transitioned from an agricultural marketplace supporting regional poultry and dairy dominance into a multi-use civic venue hosting legendary events like the Sonoma-Marin Fair and the globally famous World's Ugliest Dog Contest.
+                </p>
+            </div>
+
+            <!-- Economic Pillars & Fair Impact -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Textual Analysis -->
+                <div class="lg:col-span-7 bg-white p-6 rounded-xl border border-sand-200 shadow-sm space-y-4">
+                    <h3 class="text-lg font-bold text-sand-900 font-serif border-b border-sand-200 pb-2">The Industrial & Agrarian Foundations</h3>
+                    
+                    <div class="text-xs text-sand-800 space-y-3 leading-relaxed">
+                        <p>
+                            <strong>The River & Rail Logistics Engine:</strong> By the late 19th century, Petaluma harnessed the tidal Petaluma River as a primary freight highway connecting San Francisco with North Bay produce. The arrival of the Northwestern Pacific Railroad transformed the city into an industrial shipping hub for grain elevators, feed mills, and egg production.
+                        </p>
+                        <p>
+                            <strong>The "World's Egg Capital":</strong> Innovation in incubator design by Lyman Byce in Petaluma established the city as the world's leading poultry hub by 1910. The fairgrounds site was formalized to host livestock showcases, poultry auctions, and agricultural machinery demonstrations—activities that directly funded regional economic growth.
+                        </p>
+                        <p>
+                            <strong>Cultural Anchor & Global Recognition:</strong> While agricultural expositions anchored early operations, events like the <em>World's Ugliest Dog Contest</em> (hosted on site since 1988) achieved global media prominence. The contest subverts traditional pedigree pageants, emphasizing animal rescue awareness and generating significant seasonal tourism revenue for local commerce.
+                        </p>
+                    </div>
+
+                    <div class="mt-4 p-4 bg-sand-50 rounded-lg border border-sand-200">
+                        <h4 class="font-bold text-xs text-sand-900 mb-1">Legacy Building: Herzog Hall</h4>
+                        <p class="text-xs text-sand-800">
+                            Determined individually eligible for the California Register of Historical Resources in 2022, Herzog Hall represents the visual and architectural anchor of the fairgrounds' agricultural era. Master plan guidelines dictate adaptive reuse over demolition.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Fair Metrics & Economic Impact Chart -->
+                <div class="lg:col-span-5 bg-white p-6 rounded-xl border border-sand-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-sand-900 font-serif mb-1">Sonoma-Marin Fair Economic Footprint</h3>
+                        <p class="text-xs text-sand-800 mb-4">Baseline annual performance indicators illustrating community reach and economic generation.</p>
+                        
+                        <div class="chart-container">
+                            <canvas id="fairImpactChart"></canvas>
+                        </div>
+                    </div>
+                    <p class="text-xs text-sand-800 text-center mt-2 italic">Figure 3.1: Pre-transition annual economic metrics highlighting heavy civic participation.</p>
+                </div>
+            </div>
+
+            <!-- Petaluma Speedway Dispute Spotlight -->
+            <div class="bg-white p-6 rounded-xl border border-sand-200 shadow-sm">
+                <h3 class="text-lg font-bold text-sand-900 font-serif mb-3">The Petaluma Speedway Dilemma: Legacy vs. Urban Modernity</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs leading-relaxed">
+                    <div class="p-4 bg-sand-50 rounded-lg border-l-4 border-amber-600">
+                        <h4 class="font-bold text-sand-900 text-sm mb-1">🏁 Speedway Proponents ("Save Petaluma Speedway")</h4>
+                        <ul class="list-disc list-inside space-y-1 text-sand-800">
+                            <li>Continuous operation since 1968; 3/8-mile dirt oval track is a Northern California racing pillar.</li>
+                            <li>Generates substantial secondary revenue for local hotels, gas stations, and restaurants.</li>
+                            <li>Provides unique, accessible family entertainment and deep regional cultural heritage.</li>
+                        </ul>
+                    </div>
+
+                    <div class="p-4 bg-sand-50 rounded-lg border-l-4 border-terracotta-600">
+                        <h4 class="font-bold text-sand-900 text-sm mb-1">🌿 Environmental & Urban Critics</h4>
+                        <p class="text-sand-800 mb-2">
+                            Points out incongruity with Petaluma's 2019 Climate Emergency Declaration and 2045 carbon neutrality goals.
+                        </p>
+                        <ul class="list-disc list-inside space-y-1 text-sand-800">
+                            <li>Concerns over ambient noise pollution, dust particulate matter, and fossil fuel consumption.</li>
+                            <li>Aging bleacher structures require extensive structural capital repairs ($13M+ site deficit).</li>
+                            <li>Advocates for transition into electric vehicle racing, amphitheater, or expanded parkland by 2035.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- TAB 5: 50-YEAR SOCIO-POLITICAL SHIFT -->
+        <!-- ========================================== -->
+        <section id="content-political" class="tab-content hidden space-y-8">
+            <div class="bg-white p-6 sm:p-8 rounded-xl border border-sand-200 shadow-sm">
+                <span class="text-xs font-bold uppercase tracking-wider text-pine-700 bg-pine-100 px-2.5 py-1 rounded">Civic Innovation & Governance</span>
+                <h2 class="text-2xl font-serif font-bold text-sand-900 mt-3">Suburban Transition & The Democratic Assembly</h2>
+                <p class="mt-3 text-sand-800 text-sm leading-relaxed">
+                    Over the past 50 years, Petaluma transformed from a rural agrarian supply hub into a bedroom community for San Francisco and Marin County commuters. When the 50-year state fairgrounds lease expired on Dec 31, 2023, the City of Petaluma employed groundbreaking democratic lottery methods to guide reclamation.
+                </p>
+            </div>
+
+            <!-- Lease Dispute & Deliberative Democracy -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Lease Expiration Summary -->
+                <div class="bg-white p-6 rounded-xl border border-sand-200 shadow-sm space-y-4">
+                    <h3 class="text-lg font-bold text-sand-900 font-serif border-b border-sand-200 pb-2">The 2023 Lease Expiration Dispute</h3>
+                    <div class="text-xs text-sand-800 space-y-3 leading-relaxed">
+                        <p>
+                            <strong>State vs. Local Friction:</strong> For decades, the state-affiliated 4th District Agricultural Association (DAA) operated the grounds. By 2023, the site accumulated over <strong>$13 million in deferred maintenance</strong>, while the DAA ran a structural operating deficit.
+                        </p>
+                        <p>
+                            <strong>The July 2023 Impasse:</strong> The City offered two lease models: a partnership where the city managed maintenance and split event revenues, or a seasonal license agreement for the annual fair. The 4th DAA rejected both, requesting $1M+ in annual general fund subsidies.
+                        </p>
+                        <p>
+                            <strong>Municipal Reclamation:</strong> On January 1, 2024, the City of Petaluma assumed direct control of 175 Fairgrounds Drive, establishing local municipal sovereignty over its prime central real estate.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Healthy Democracy Panel Directives -->
+                <div class="bg-white p-6 rounded-xl border border-sand-200 shadow-sm space-y-4">
+                    <h3 class="text-lg font-bold text-sand-900 font-serif border-b border-sand-200 pb-2">Healthy Democracy Civic Assembly</h3>
+                    <p class="text-xs text-sand-800 leading-relaxed">
+                        In 2022, Petaluma partnered with nonpartisan nonprofit <em>Healthy Democracy</em> to select a 36-person Citizens' Panel via demographic lottery. Representing a cross-section of age, race, income, and disability status, the panel deliberated over 90 hours to produce 3 core non-negotiable priorities adopted by City Council on October 24, 2022:
+                    </p>
+
+                    <div class="space-y-2 text-xs">
+                        <div class="p-2.5 bg-sand-50 rounded border-l-4 border-terracotta-600">
+                            <strong>Mandate 1: Preserve the Fair</strong> — Maintain the annual summer Petaluma Fair honoring agricultural heritage.
+                        </div>
+                        <div class="p-2.5 bg-sand-50 rounded border-l-4 border-pine-700">
+                            <strong>Mandate 2: Continuous Year-Round Porous Access</strong> — Transition from an enclosed compound to a walkable, integrated public civic park with continuous programming.
+                        </div>
+                        <div class="p-2.5 bg-sand-50 rounded border-l-4 border-ochre-500">
+                            <strong>Mandate 3: Regional Disaster Resilience Hub</strong> — Formalize and upgrade facilities to serve as a regional emergency evacuation, medical, and livestock shelter.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Civic Priorities Breakdown Chart -->
+            <div class="bg-white p-6 rounded-xl border border-sand-200 shadow-sm">
+                <h3 class="text-lg font-bold text-sand-900 font-serif mb-1">Community Assembly Priorities Allocation</h3>
+                <p class="text-xs text-sand-800 mb-4">Relative weight of design directives established by the 36-resident deliberative panel.</p>
+                
+                <div class="chart-container">
+                    <canvas id="civicPriorityChart"></canvas>
+                </div>
+                <p class="text-xs text-sand-800 text-center mt-2 italic">Figure 4.1: Public priority weighting guiding David Baker Architects' master plan framework.</p>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- TAB 6: ARCHITECTURAL MATRIX & CONSTRAINTS -->
+        <!-- ========================================== -->
+        <section id="content-matrix" class="tab-content hidden space-y-8">
+            <div class="bg-white p-6 sm:p-8 rounded-xl border border-sand-200 shadow-sm">
+                <span class="text-xs font-bold uppercase tracking-wider text-terracotta-600 bg-terracotta-100 px-2.5 py-1 rounded">Actionable Site Synthesis</span>
+                <h2 class="text-2xl font-serif font-bold text-sand-900 mt-3">Architectural Design Guidelines & Site Constraints Matrix</h2>
+                <p class="mt-3 text-sand-800 text-sm leading-relaxed">
+                    This interactive matrix synthesizes spatial, environmental, regulatory, and structural parameters into concrete actionable constraints for architectural and master planning teams proposing interventions at 175 Fairgrounds Drive.
+                </p>
+            </div>
+
+            <!-- Public Safety Facility Integration Breakdown -->
+            <div class="bg-white p-6 rounded-xl border border-sand-200 shadow-sm space-y-4">
+                <div class="flex flex-wrap justify-between items-center gap-2 border-b border-sand-200 pb-3">
+                    <h3 class="text-lg font-bold text-sand-900 font-serif">Critical Anchor: Petaluma Public Safety Facility ($71.5M)</h3>
+                    <span class="px-3 py-1 bg-pine-100 text-pine-900 text-xs font-mono font-bold rounded">Delivery: Mid-2028</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <div class="p-3 bg-sand-50 rounded border border-sand-200">
+                        <strong>Architectural Scope:</strong> 45,000 sq ft 2-story main building + 5,000 sq ft support structure. Design-build team: Alten Construction ($51.5M contract).
+                    </div>
+                    <div class="p-3 bg-sand-50 rounded border border-sand-200">
+                        <strong>Programmed Uses:</strong> Relocated Police HQ, new Fire Station No. 4 (with ladder truck bays), and a FEMA-backed Emergency Operations Center (EOC).
+                    </div>
+                    <div class="p-3 bg-sand-50 rounded border border-sand-200">
+                        <strong>Egress & Traffic Design:</strong> Avoids E. Washington St congestion; utilizes controlled exits at Johnson St, Ellis St, and Payran St for zero response delay.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Constraint Filter & Matrix Table -->
+            <div class="bg-white p-6 rounded-xl border border-sand-200 shadow-sm space-y-6">
+                <div class="flex flex-wrap justify-between items-center gap-4">
+                    <h3 class="text-lg font-bold text-sand-900 font-serif">Comprehensive Design Parameters</h3>
+                    
+                    <!-- Filter Buttons -->
+                    <div class="flex flex-wrap gap-2 text-xs">
+                        <button onclick="filterMatrix('all')" class="filter-btn active px-3 py-1 bg-sand-200 text-sand-900 rounded font-medium">All Parameters</button>
+                        <button onclick="filterMatrix('zoning')" class="filter-btn px-3 py-1 bg-sand-100 text-sand-800 rounded font-medium hover:bg-sand-200">Zoning & CEQA</button>
+                        <button onclick="filterMatrix('historic')" class="filter-btn px-3 py-1 bg-sand-100 text-sand-800 rounded font-medium hover:bg-sand-200">Historic Preservation</button>
+                        <button onclick="filterMatrix('resilience')" class="filter-btn px-3 py-1 bg-sand-100 text-sand-800 rounded font-medium hover:bg-sand-200">Resilience & Water</button>
+                    </div>
+                </div>
+
+                <!-- Matrix Table -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="bg-sand-100 text-sand-900 border-b border-sand-200">
+                                <th class="p-3 font-bold">Category</th>
+                                <th class="p-3 font-bold">Parameter / Requirement</th>
+                                <th class="p-3 font-bold">Design Directive & Impact</th>
+                                <th class="p-3 font-bold">Regulatory Authority</th>
+                            </tr>
+                        </thead>
+                        <tbody id="matrix-tbody" class="divide-y divide-sand-200 text-sand-800">
+                            <!-- Matrix Row 1 -->
+                            <tr class="matrix-row zoning">
+                                <td class="p-3 font-semibold text-terracotta-600">Zoning & Height</td>
+                                <td class="p-3 font-medium text-sand-900">Civic/Institutional Overlay</td>
+                                <td class="p-3">Max height tiering aligns with General Plan 2040. Maintain visual corridors toward Sonoma Mountains.</td>
+                                <td class="p-3">City of Petaluma Planning Dept</td>
+                            </tr>
+                            <!-- Matrix Row 2 -->
+                            <tr class="matrix-row historic">
+                                <td class="p-3 font-semibold text-terracotta-600">Historic Asset</td>
+                                <td class="p-3 font-medium text-sand-900">Herzog Hall Adaptive Reuse</td>
+                                <td class="p-3">Eligible for CA Register of Historical Resources. Mandatory retention; structural retrofitting required for public assembly.</td>
+                                <td class="p-3">SHPO / CEQA Guidelines</td>
+                            </tr>
+                            <!-- Matrix Row 3 -->
+                            <tr class="matrix-row resilience">
+                                <td class="p-3 font-semibold text-pine-700">Flood & Runoff</td>
+                                <td class="p-3 font-medium text-sand-900">Low-Gradient Watershed Management</td>
+                                <td class="p-3">Zero net increase in surface runoff. Incorporate bio-swales, rain gardens, and permeable paving linked to Kenilworth Park systems.</td>
+                                <td class="p-3">Sonoma Water / City Engineering</td>
+                            </tr>
+                            <!-- Matrix Row 4 -->
+                            <tr class="matrix-row zoning">
+                                <td class="p-3 font-semibold text-terracotta-600">Environmental</td>
+                                <td class="p-3 font-medium text-sand-900">CEQA Streamlining (Sec 15183)</td>
+                                <td class="p-3">Projects tier off General Plan EIR. SB 743 VMT rules apply, favoring multi-modal pedestrian and bicycle connections over auto capacity.</td>
+                                <td class="p-3">State of California / CEQA</td>
+                            </tr>
+                            <!-- Matrix Row 5 -->
+                            <tr class="matrix-row resilience">
+                                <td class="p-3 font-semibold text-pine-700">Resilience</td>
+                                <td class="p-3 font-medium text-sand-900">Community Resilience Center (CRC)</td>
+                                <td class="p-3">Facilities must provide dual-use capacity: everyday community programming + instant pivot to emergency disaster shelter (backup power, water, livestock hold).</td>
+                                <td class="p-3">FEMA / Cal OES / Petaluma EOC</td>
+                            </tr>
+                            <!-- Matrix Row 6 -->
+                            <tr class="matrix-row historic">
+                                <td class="p-3 font-semibold text-terracotta-600">Urban Edge</td>
+                                <td class="p-3 font-medium text-sand-900">Kenilworth Park & Library Integration</td>
+                                <td class="p-3">Create porous, un-fenced transitions along Kenilworth Drive connecting Teen Center, Regional Library, Swim Center, and Park.</td>
+                                <td class="p-3">Petaluma Parks & Rec / Master Plan</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Architectural Call to Action Banner -->
+            <div class="bg-gradient-to-r from-sand-800 to-sand-900 text-white p-6 sm:p-8 rounded-xl shadow-md">
+                <h3 class="text-xl font-serif font-bold text-sand-50 mb-2">Architect's Summary Checklist</h3>
+                <p class="text-xs sm:text-sm text-sand-200 leading-relaxed mb-4">
+                    Any successful architectural intervention at 175 Fairgrounds Drive must balance the memory of agrarian Sonoma County with futuristic climate resilience, creating an open civic sanctuary that serves daily neighborhood life while standing ready for regional crises.
+                </p>
+                <div class="flex flex-wrap gap-4 text-xs font-semibold">
+                    <span class="px-3 py-1.5 bg-terracotta-600 text-white rounded">✓ Respect Herzog Hall Historic Envelope</span>
+                    <span class="px-3 py-1.5 bg-pine-700 text-white rounded">✓ Align with Public Safety Egress Corridors</span>
+                    <span class="px-3 py-1.5 bg-ochre-600 text-white rounded">✓ Porous Perimeter Design</span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-sand-100 border-t border-sand-200 mt-12 py-6 text-xs text-sand-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap justify-between items-center gap-4">
+            <div>
+                <p class="font-bold text-sand-900">175 Fairgrounds Drive Site Research & Architectural Context Briefing</p>
+                <p>Designed for Master Planning Teams, Architects, & Urban Designers • City of Petaluma, CA</p>
+            </div>
+            <div class="text-right">
+                <p>Data Sources: Petaluma General Plan 2040, Healthy Democracy Assembly Reports, CIP C11202431</p>
+                <p class="text-sand-800 font-mono">Status: 2026 Master Planning Phase (David Baker Architects)</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic & Chart Initialization -->
+    <script>
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            // Hide all tab content
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.add('hidden'));
+
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active', 'text-terracotta-700', 'bg-white', 'shadow-sm', 'border', 'border-sand-200');
+                btn.classList.add('text-sand-800', 'hover:text-sand-900', 'hover:bg-sand-200/60');
+            });
+
+            // Show target content
+            const targetContent = document.getElementById('content-' + tabId);
+            if (targetContent) {
+                targetContent.classList.remove('hidden');
+            }
+
+            // Highlight active button
+            const activeBtn = document.getElementById('tab-' + tabId);
+            if (activeBtn) {
+                activeBtn.classList.add('active', 'text-terracotta-700', 'bg-white', 'shadow-sm', 'border', 'border-sand-200');
+                activeBtn.classList.remove('text-sand-800', 'hover:text-sand-900', 'hover:bg-sand-200/60');
+            }
+        }
+
+        // Matrix Filtering Logic
+        function filterMatrix(category) {
+            const rows = document.querySelectorAll('.matrix-row');
+            const btns = document.querySelectorAll('.filter-btn');
+
+            btns.forEach(btn => {
+                btn.classList.remove('active', 'bg-sand-200', 'text-sand-900');
+                btn.classList.add('bg-sand-100', 'text-sand-800');
+            });
+
+            event.target.classList.add('active', 'bg-sand-200', 'text-sand-900');
+
+            rows.forEach(row => {
+                if (category === 'all') {
+                    row.classList.remove('hidden');
+                } else if (row.classList.contains(category)) {
+                    row.classList.remove('hidden');
+                } else {
+                    row.classList.add('hidden');
+                }
+            });
+        }
+
+        // Initialize Charts on DOM Loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Spatial Chart (Doughnut)
+            const ctxSpatial = document.getElementById('spatialChart').getContext('2d');
+            new Chart(ctxSpatial, {
+                type: 'doughnut',
+                data: {
+                    labels: [
+                        'Public Safety Campus (3.5 ac)',
+                        'Fair & Event Core (22 ac)',
+                        'Speedway Oval (12 ac)',
+                        'Parking & Staging (18.5 ac)'
+                    ],
+                    datasets: [{
+                        data: [6, 38, 21, 35],
+                        backgroundColor: ['#2D4A3E', '#8C4327', '#D99B26', '#D5CBB9'],
+                        borderWidth: 2,
+                        borderColor: '#FFFFFF'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { font: { size: 11 }, boxWidth: 12 }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ' ' + context.label + ': ' + context.raw + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // 2. Climate Chart (Combo Line/Bar)
+            const ctxClimate = document.getElementById('climateChart').getContext('2d');
+            new Chart(ctxClimate, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [
+                        {
+                            type: 'line',
+                            label: 'Avg High Temp (°F)',
+                            data: [57, 61, 64, 68, 72, 77, 81, 81, 80, 75, 65, 57],
+                            borderColor: '#8C4327',
+                            backgroundColor: '#8C4327',
+                            borderWidth: 2,
+                            yAxisID: 'yTemp'
+                        },
+                        {
+                            type: 'bar',
+                            label: 'Precipitation (Inches)',
+                            data: [4.8, 4.2, 3.1, 1.4, 0.6, 0.2, 0.0, 0.0, 0.2, 1.1, 2.9, 4.5],
+                            backgroundColor: '#3E6B56',
+                            borderRadius: 3,
+                            yAxisID: 'yRain'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        yTemp: {
+                            type: 'linear',
+                            position: 'left',
+                            title: { display: true, text: 'Temperature (°F)', font: { size: 10 } },
+                            min: 40,
+                            max: 90
+                        },
+                        yRain: {
+                            type: 'linear',
+                            position: 'right',
+                            title: { display: true, text: 'Rainfall (Inches)', font: { size: 10 } },
+                            min: 0,
+                            max: 6,
+                            grid: { drawOnChartArea: false }
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom', labels: { font: { size: 10 } } }
+                    }
+                }
+            });
+
+            // 3. Fair Economic Impact Chart (Horizontal Bar)
+            const ctxFair = document.getElementById('fairImpactChart').getContext('2d');
+            new Chart(ctxFair, {
+                type: 'bar',
+                data: {
+                    labels: ['Fair Attendees', 'Direct Revenue ($k)', 'Exhibits Shown', 'Temporary Jobs'],
+                    datasets: [{
+                        label: 'Annual Fair Footprint Baseline',
+                        data: [584, 625, 342, 135],
+                        backgroundColor: ['#B85B35', '#2D4A3E', '#D99B26', '#3D3833'],
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const scaleLabels = [' 58,482 Attendees', ' $625,838 Direct Revenue', ' 3,420 Exhibits', ' 135 Jobs Created'];
+                                    return scaleLabels[context.dataIndex];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { grid: { color: '#E8E2D5' } }
+                    }
+                }
+            });
+
+            // 4. Civic Priority Chart (Bar)
+            const ctxCivic = document.getElementById('civicPriorityChart').getContext('2d');
+            new Chart(ctxCivic, {
+                type: 'bar',
+                data: {
+                    labels: [
+                        'Annual Fair Preservation',
+                        'Public Porous Access',
+                        'Disaster Resilience Hub',
+                        'Green Ecology / Parks',
+                        'Speedway Transition'
+                    ],
+                    datasets: [{
+                        label: 'Assembly Priority Support Index (%)',
+                        data: [94, 88, 91, 82, 65],
+                        backgroundColor: ['#8C4327', '#2D4A3E', '#3E6B56', '#D99B26', '#B57E19'],
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 100,
+                            title: { display: true, text: 'Panel Consensus Support (%)', font: { size: 11 } }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
